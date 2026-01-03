@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 800" role="img" aria-labelledby="title desc">
+  <title id="title">Pixel family avatar</title>
+  <desc id="desc">Pixel styled illustration of a smiling parent and child in neon arcade colors.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#05060c" />
+      <stop offset="50%" stop-color="#0c1228" />
+      <stop offset="100%" stop-color="#05060c" />
+    </linearGradient>
+  </defs>
+  <rect width="640" height="800" fill="url(#bg)" />
+  <g fill="#ffb74d" opacity="0.6">
+    <rect x="40" y="80" width="10" height="10" />
+    <rect x="120" y="160" width="12" height="12" />
+    <rect x="520" y="120" width="12" height="12" />
+    <rect x="560" y="260" width="10" height="10" />
+    <rect x="200" y="60" width="10" height="10" />
+    <rect x="420" y="220" width="14" height="14" />
+    <rect x="320" y="140" width="12" height="12" />
+  </g>
+  <g transform="translate(50 120)">
+    <rect x="70" y="140" width="470" height="470" rx="50" fill="#0e1023" stroke="#0b0d1a" stroke-width="12" />
+    <g transform="translate(120 110)">
+      <rect x="90" y="60" width="310" height="260" rx="120" fill="#1e243a" stroke="#f6a76b" stroke-width="14" />
+      <rect x="0" y="260" width="270" height="270" rx="90" fill="#1c2140" stroke="#f6a76b" stroke-width="14" />
+      <circle cx="190" cy="190" r="70" fill="#15192d" />
+      <circle cx="170" cy="200" r="36" fill="#fff" />
+      <circle cx="240" cy="200" r="36" fill="#fff" />
+      <circle cx="175" cy="200" r="18" fill="#05060c" />
+      <circle cx="235" cy="200" r="18" fill="#05060c" />
+      <rect x="150" y="240" width="130" height="80" rx="12" fill="#ff8a65" />
+      <circle cx="140" cy="370" r="60" fill="#1d2140" />
+      <circle cx="210" cy="370" r="60" fill="#1d2140" />
+      <circle cx="150" cy="360" r="32" fill="#fff" />
+      <circle cx="210" cy="360" r="32" fill="#fff" />
+      <circle cx="150" cy="360" r="14" fill="#05060c" />
+      <circle cx="210" cy="360" r="14" fill="#05060c" />
+      <rect x="145" y="390" width="110" height="60" rx="10" fill="#ff9e80" />
+      <rect x="115" y="445" width="170" height="70" rx="14" fill="#0d1124" />
+      <text x="132" y="492" fill="#f8e05b" font-family="'Press Start 2P', 'Courier New', monospace" font-size="34">Chin</text>
+    </g>
+  </g>
+</svg>

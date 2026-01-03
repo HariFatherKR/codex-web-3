@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { ContactModal, type ContactPayload } from '@/components/ContactModal';
@@ -129,6 +130,18 @@ export default function Home() {
   return (
     <main className="bio-shell">
       <header className="hero-card pixel-panel">
+        <div className="profile-image-wrap">
+          <div className="profile-image-frame">
+            <Image
+              src="/profile.svg"
+              alt="픽셀 스타일의 가족 프로필 이미지"
+              width={320}
+              height={420}
+              className="profile-image"
+              priority
+            />
+          </div>
+        </div>
         <div className="flex items-center gap-3">
           <div className="avatar-chip" aria-hidden>
             <span className="text-lg">{profile.hero.avatar}</span>

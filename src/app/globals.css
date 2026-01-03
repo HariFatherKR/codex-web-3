@@ -47,6 +47,27 @@ a {
   @apply space-y-4;
 }
 
+.profile-image-wrap {
+  @apply flex justify-center;
+}
+
+.profile-image-frame {
+  border: 6px solid #05060c;
+  box-shadow: 0 0 0 4px #0a0d1c, 10px 10px 0 #05060c;
+  background: radial-gradient(circle at 30% 30%, rgba(126, 255, 107, 0.12), transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(108, 225, 255, 0.14), transparent 55%),
+    linear-gradient(135deg, #0f142a, #0a0d1d);
+  @apply inline-flex rounded-full p-3;
+}
+
+.profile-image {
+  border-radius: 9999px;
+  border: 4px solid #0b0d1a;
+  box-shadow: 0 0 20px rgba(108, 225, 255, 0.4), 0 0 0 6px #05060c;
+  background-color: #0a0d1c;
+  object-fit: cover;
+}
+
 .pixel-button {
   border: 3px solid #05060c;
   box-shadow: 4px 4px 0 #05060c;
