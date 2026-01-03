@@ -116,7 +116,7 @@ a {
 }
 
 .quick-link {
-  @apply flex items-center justify-between rounded-xl border-4 border-slate-900 px-4 py-3 text-slate-900 shadow-[6px_6px_0_#0f172a] transition;
+  @apply flex h-12 items-center justify-between gap-2 rounded-xl border-4 border-slate-900 px-4 text-base font-semibold text-slate-900 shadow-[6px_6px_0_#0f172a] transition;
 }
 
 .quick-link:hover {
