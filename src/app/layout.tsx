@@ -2,11 +2,13 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Vibe Coding Creator | 8bit Prompt BIO',
-  description: '8bit Linktree BIO with Prompt Loop, Vercel ready and Supabase wired for feedback.',
+  title: 'Vibe Coding Creator | Dark 8bit BIO',
+  description:
+    '모바일 중심 Dark 8bit Linktree BIO. 강의, 문의, SNS 이동만 빠르게 노출되는 단순한 프로필 페이지.',
   openGraph: {
-    title: 'Vibe Coding Creator | 8bit Prompt BIO',
-    description: 'Prompt → Output → Review → Improve 구조로 사고하는 시스템을 보여주는 BIO.',
+    title: 'Vibe Coding Creator | Dark 8bit BIO',
+    description:
+      '강의 보기, 문의, SNS 이동을 10초 내에 보여주는 다크 8bit 아케이드 감성의 링크트리 BIO.',
     url: 'https://codex-web-3.vercel.app',
     type: 'website'
   },
