@@ -7,8 +7,8 @@
   "hero": {
     "name": "바이브코딩 크리에이터",
     "tagline": "AI로 사고하는 시스템을 설계합니다",
-    "intro": "Prompt → Output → Review → Improve 루프로 BIO를 계속 다듬는 사람. 비개발자도 바로 연결되는 8bit 실험실을 운영합니다.",
-    "keywords": ["Prompt Ops", "Vercel Edge", "Supabase", "Course Builder", "UX Research", "A/B Prompt"]
+    "intro": "ChatGPT·Claude로 비개발자도 프로덕트를 만들게 돕습니다",
+    "keywords": ["Prompt Ops", "Vercel Edge", "Supabase", "AI Workshop", "A/B Prompt"]
   },
   "quickLinks": [
     {
@@ -82,6 +82,28 @@
         "스터디/커뮤니티 운영자로 사용자 질문 수집",
         "B2B/B2C 제품 모두 경험"
       ]
+    }
+  ],
+  "doneProjects": [
+    {
+      "title": "AI 워크숍 30회+ 운영",
+      "detail": "비개발자도 따라오는 Vercel·Supabase 실습 커리큘럼",
+      "link": "https://vibecoding.ai/live"
+    },
+    {
+      "title": "Prompt Loop 실험실",
+      "detail": "Prompt → Output → Review 데이터를 연결한 8bit BIO 실험",
+      "link": "https://vibecoding.ai/lab"
+    },
+    {
+      "title": "콘텐츠 전환형 카피 테스트",
+      "detail": "CTA/문의 로그를 모아 카피를 리라이트하는 A/B 테스트",
+      "link": "https://www.linkedin.com/in/vibecoding"
+    },
+    {
+      "title": "팀 단위 Prompt Ops",
+      "detail": "팀 ROC 설계와 리뷰 데이터를 묶어 협업 속도 개선",
+      "link": "https://vibecoding.ai/team"
     }
   ],
   "courses": [

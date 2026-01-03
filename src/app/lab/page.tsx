@@ -63,6 +63,21 @@ const supabaseSchema = [
   }
 ];
 
+const promptLoopHighlights = [
+  {
+    title: 'Prompt',
+    detail: '섹션별 ROC를 가진 Prompt로 관리하며 버전을 추적합니다.'
+  },
+  {
+    title: 'Output',
+    detail: '퍼블릭 BIO에는 outputs.is_published=true인 결과만 노출됩니다.'
+  },
+  {
+    title: 'Review',
+    detail: 'CTA/링크 클릭과 문의 유형까지 Supabase reviews 테이블에 적재합니다.'
+  }
+];
+
 export default function LabPage() {
   return (
     <main className="container space-y-10 py-12">
@@ -74,6 +89,21 @@ export default function LabPage() {
           Supabase 테이블 구조를 따라 바로 Admin 페이지를 확장할 수 있습니다.
         </p>
       </header>
+
+      <SectionCard
+        title="Prompt Loop"
+        description="/에서 사라진 Prompt Loop 요약입니다. 실제 루프와 데이터 흐름은 Lab에서 확인하세요."
+        badge="Lab 전용"
+      >
+        <div className="grid gap-4 md:grid-cols-3">
+          {promptLoopHighlights.map((item) => (
+            <div key={item.title} className="callout">
+              <p className="label-8bit text-xs text-brand-700">{item.title}</p>
+              <p className="mt-2 text-sm text-slate-900">{item.detail}</p>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
 
       <div className="grid gap-6 lg:grid-cols-2" id="prompt-loop">
         <div className="space-y-6">
