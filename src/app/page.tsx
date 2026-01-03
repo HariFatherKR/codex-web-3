@@ -1,206 +1,355 @@
-import { FeatureList } from '@/components/FeatureList';
-import { SectionCard } from '@/components/SectionCard';
+'use client';
 
-const promptSections = [
-  {
-    title: 'Prompt',
-    description: '모든 콘텐츠는 ROC 구조를 갖춘 Prompt로 관리됩니다.',
-    items: [
-      '섹션별 Role · Objective · Context를 정의해 Codex가 집중해야 할 방향을 명확히 함',
-      '버전 관리를 통해 개선 흐름을 추적하고, Supabase에 의도까지 저장',
-      'Hero / Who / Course / CTA 등 모든 섹션이 동일한 구조를 따름'
-    ]
-  },
-  {
-    title: 'Output',
-    description: 'Codex가 생성한 결과가 사용자에게 즉시 노출되고 로그화됩니다.',
-    items: [
-      '모델별 응답을 outputs 테이블에 저장하여 실험 결과를 비교',
-      '공개 페이지의 카피도 Prompt 결과물을 그대로 노출',
-      '강의/협업 문의로 자연스럽게 이어지는 메시지를 테스트'
-    ]
-  },
-  {
-    title: 'Review',
-    description: '정량+정성 데이터를 동시에 수집하여 Prompt 개선 근거를 만듭니다.',
-    items: [
-      'CTA 클릭률, 스크롤 깊이 등 행동 데이터',
-      '문의 유형, 자주 묻는 질문 같은 정성 피드백',
-      '모든 리뷰 데이터가 Prompt 개선의 출발점'
-    ]
-  },
-  {
-    title: 'Improve',
-    description: 'Review 데이터를 반영해 Prompt 자체를 리라이트합니다.',
-    items: [
-      '“문구 수정”이 아닌 ROC 관점에서 목표와 컨텍스트를 재설계',
-      '변경된 Prompt로 새 Output을 생성하고 실험을 반복',
-      '바이브코딩 사고방식을 증명하는 루프로 작동'
-    ]
-  }
-];
+import Link from 'next/link';
+import { useMemo, useState } from 'react';
+import { ContactModal, type ContactPayload } from '@/components/ContactModal';
+import profile from '@/content/profile.json';
 
-const supabaseSchema = [
-  {
-    name: 'prompts',
-    fields: ['id', 'section', 'role', 'objective', 'context', 'prompt_text', 'version', 'created_at'],
-    highlight: '각 Prompt는 ROC와 버전 정보를 함께 저장해 추적과 실험을 단순화합니다.'
-  },
-  {
-    name: 'outputs',
-    fields: ['id', 'prompt_id', 'content', 'model', 'created_at'],
-    highlight: '모델별 생성 결과를 모두 기록해 어떤 메시지가 전환을 만들었는지 비교 분석.'
-  },
-  {
-    name: 'reviews',
-    fields: ['id', 'output_id', 'metric_type', 'value', 'created_at'],
-    highlight: '정량/정성 메트릭을 한 곳에 모아 Prompt 개선의 근거 데이터로 활용합니다.'
+type Section = {
+  id: string;
+  title: string;
+  summary: string;
+  points: string[];
+};
+
+async function logEvent(metricType: string, meta?: Record<string, unknown>) {
+  try {
+    await fetch('/api/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ metricType, value: 1, meta })
+    });
+  } catch (error) {
+    console.error('Failed to track event', error);
   }
-];
+}
+
+async function submitInquiry(payload: ContactPayload, setStatus: (s: ContactStatus) => void, setFeedback: (m: string) => void) {
+  try {
+    setStatus('loading');
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.error ?? '전송에 실패했어요. 나중에 다시 시도해주세요.');
+    }
+
+    setStatus('success');
+    setFeedback('문의가 접수되었어요! 24시간 내에 답변을 드리고, 반복되는 질문은 Prompt에 반영합니다.');
+    await logEvent('cta_click', { inquiryType: payload.inquiryType, source: payload.source ?? 'public', location: 'modal' });
+  } catch (error) {
+    console.error(error);
+    setStatus('error');
+    setFeedback(error instanceof Error ? error.message : '잠시 후 다시 시도해주세요.');
+  }
+}
+
+type ContactStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export default function Home() {
+  const [activeSection, setActiveSection] = useState<string>('who');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [contactStatus, setContactStatus] = useState<ContactStatus>('idle');
+  const [feedback, setFeedback] = useState<string>('');
+
+  const sections = useMemo<Section[]>(() => profile.sections, []);
+
+  const currentSection = sections.find((section) => section.id === activeSection) ?? sections[0];
+
+  const defaultInquiryType = useMemo(() => {
+    switch (activeSection) {
+      case 'done':
+        return '기업워크숍';
+      case 'good':
+        return '콘텐츠협업';
+      case 'been':
+        return '기타';
+      default:
+        return '강의';
+    }
+  }, [activeSection]);
+
+  const openModal = (type?: string) => {
+    setIsModalOpen(true);
+    if (type) {
+      setActiveSection(type);
+    }
+  };
+
   return (
-    <main className="container space-y-12 py-12">
-      <header className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-        <div className="space-y-4">
-          <div className="badge w-fit">Vibe Coding Creator · Prompt System</div>
-          <h1 className="text-4xl font-bold leading-tight text-slate-900 md:text-5xl">
-            “나는 AI로 문구를 만드는 사람이 아니라
-            <span className="block text-brand-700">AI로 사고하는 시스템을 설계하는 사람이다.”</span>
-          </h1>
-          <p className="text-lg text-slate-700 md:text-xl">
-            이 BIO는 단순한 소개가 아니라, Prompt → Output → Review → Improve 루프를 그대로
-            보여주는 제품입니다. 방문자는 ‘무엇을 파는가’보다 ‘어떻게 사고하는가’를 경험합니다.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <a
-              className="rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-brand-700"
-              href="#prompt-loop"
-            >
-              Prompt Loop 보기
-            </a>
-            <a
-              className="rounded-full border border-brand-200 bg-white px-5 py-3 text-sm font-semibold text-brand-700 transition hover:border-brand-400"
-              href="#contact"
-            >
-              협업/강의 문의 흐름
-            </a>
+    <main className="container flex min-h-screen flex-col gap-10 py-12">
+      <header className="pixel-card relative overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-3 bg-gradient-to-r from-brand-400 via-brand-600 to-brand-400" />
+        <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="pixel-chip bg-brand-200 text-slate-900">
+                {profile.level.label}: {profile.level.title}
+              </span>
+              <span className="pixel-chip bg-white text-brand-700 sparkle">Prompt Loop Ready</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="label-8bit text-lg text-slate-900">{profile.hero.tagline}</p>
+            </div>
+            <h1 className="text-4xl font-extrabold text-slate-900 md:text-5xl">{profile.hero.name}</h1>
+            <p className="max-w-3xl text-lg text-slate-700 md:text-xl">{profile.hero.intro}</p>
+            <div className="flex flex-wrap gap-2">
+              {profile.hero.keywords.map((keyword) => (
+                <span key={keyword} className="keyword-badge">
+                  {keyword}
+                </span>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <a
+                className="pixel-button bg-brand-500 text-white"
+                href={profile.cta.heroLink}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => logEvent('cta_click', { location: 'hero', label: '강의 보기' })}
+              >
+                {profile.cta.primary}
+              </a>
+              <button
+                className="pixel-button bg-white text-slate-900"
+                type="button"
+                onClick={() => {
+                  setIsModalOpen(true);
+                  logEvent('cta_click', { location: 'hero', label: '협업/강의 문의' });
+                }}
+              >
+                {profile.cta.secondary}
+              </button>
+              <Link className="pixel-button bg-slate-900 text-white" href="/lab" onClick={() => logEvent('link_click', { href: '/lab' })}>
+                Lab 보기
+              </Link>
+            </div>
           </div>
-        </div>
-        <div className="section-card max-w-xl">
-          <h2 className="text-xl font-semibold text-slate-900">ROC (Role · Objective · Context)</h2>
-          <ul className="mt-4 space-y-3 text-sm text-slate-700">
-            <li>
-              <strong>Role.</strong> 비개발자와 개발자 모두에게 AI 기반 프로덕트 사고방식(Vibe Coding)을
-              가르치는 크리에이터
-            </li>
-            <li>
-              <strong>Objective.</strong> “AI로 만들고 싶은 사람”이 이 시스템을 보고 배우고 싶다고 느끼게 만들기
-            </li>
-            <li>
-              <strong>Context.</strong> YouTube/Instagram/LinkedIn 유입, AI에 관심 있지만 방향이 필요한 사용자
-            </li>
-          </ul>
-          <div className="callout mt-4">
-            모든 섹션은 이 ROC를 상속받아 Prompt로 정의되고, 결과물이 바로 노출됩니다.
+          <div className="w-full max-w-md space-y-4 rounded-2xl border-4 border-slate-900 bg-white/80 p-5 text-sm shadow-[8px_8px_0_#0f172a]">
+            <div className="flex items-center justify-between">
+              <p className="label-8bit text-brand-700">XP Bar</p>
+              <p className="text-xs font-semibold text-slate-600">Prompt Loop Progress</p>
+            </div>
+            <div className="h-4 rounded-full border-2 border-slate-900 bg-slate-200">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-emerald-400 via-brand-500 to-fuchsia-500"
+                style={{ width: `${profile.level.xp}%` }}
+              />
+            </div>
+            <ul className="mt-3 space-y-2 text-slate-800">
+              <li className="flex items-center justify-between">
+                <span className="label-8bit text-xs text-slate-700">Goal</span>
+                <span className="font-semibold">15초 안에 “나/강의/협업” 전달</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="label-8bit text-xs text-slate-700">Loop</span>
+                <span className="font-semibold">Prompt → Output → Review → Improve</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="label-8bit text-xs text-slate-700">Stack</span>
+                <span className="font-semibold">Next.js · Vercel · Supabase</span>
+              </li>
+            </ul>
           </div>
         </div>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-2" id="prompt-loop">
-        <div className="space-y-6">
-          {promptSections.slice(0, 2).map((section) => (
-            <SectionCard key={section.title} title={section.title} description={section.description}>
-              <FeatureList title="포인트" items={section.items} />
-            </SectionCard>
+      <section className="pixel-card">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <h2 className="section-title">Quick Links</h2>
+          <p className="section-description">강의·콘텐츠 채널로 바로 이동해 주세요.</p>
+        </div>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          {profile.quickLinks.map((link) => (
+            <a
+              key={link.href}
+              className="quick-link"
+              href={link.href}
+              target="_blank"
+              rel="noreferrer"
+              style={{ backgroundColor: `${link.accent}15`, borderColor: '#0f172a' }}
+              onClick={() => logEvent('link_click', { href: link.href, label: link.label })}
+            >
+              <span className="font-bold">{link.label}</span>
+              <span className="label-8bit text-xs">GO →</span>
+            </a>
           ))}
         </div>
-        <div className="space-y-6">
-          {promptSections.slice(2).map((section) => (
-            <SectionCard key={section.title} title={section.title} description={section.description}>
-              <FeatureList title="포인트" items={section.items} />
-            </SectionCard>
-          ))}
-        </div>
-      </div>
+      </section>
 
-      <SectionCard
-        title="Supabase 스키마"
-        description="Prompt → Output → Review 데이터를 모두 기록하여 개선 루프를 자동화합니다."
-        badge="Vercel · Supabase"
-      >
-        <div className="grid gap-4 md:grid-cols-3">
-          {supabaseSchema.map((table) => (
-            <div key={table.name} className="rounded-xl border border-slate-200 bg-slate-50/80 p-4">
-              <div className="text-sm font-semibold uppercase tracking-wide text-brand-700">
-                {table.name}
+      <section className="pixel-card space-y-6">
+        <div className="flex flex-col gap-3">
+          <h2 className="section-title">Who / Good / Done / Have Been</h2>
+          <p className="section-description">스스로 클릭하면서 핵심을 15초 안에 파악하세요.</p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-4">
+          {sections.map((section) => (
+            <button
+              key={section.id}
+              className="tab-button"
+              data-active={activeSection === section.id}
+              onClick={() => {
+                setActiveSection(section.id);
+                logEvent('section_view', { section: section.id, mode: 'tab' });
+              }}
+            >
+              <p className="label-8bit text-xs text-slate-700">{section.title}</p>
+              <p className="mt-1 text-sm text-slate-900">{section.summary}</p>
+            </button>
+          ))}
+        </div>
+        <div className="accordion-item">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="label-8bit text-sm text-brand-700">{currentSection.title}</p>
+              <p className="mt-1 text-base font-semibold text-slate-900">{currentSection.summary}</p>
+            </div>
+            <button
+              className="pixel-button bg-brand-100 text-slate-900"
+              onClick={() => openModal(currentSection.id)}
+              type="button"
+            >
+              {profile.cta.secondary}
+            </button>
+          </div>
+          <ul className="mt-4 space-y-2 text-sm text-slate-800">
+            {currentSection.points.map((point) => (
+              <li key={point} className="flex items-start gap-2">
+                <span className="mt-1 h-2 w-2 rounded-sm bg-slate-900" aria-hidden />
+                <span>{point}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="grid gap-3 md:grid-cols-2">
+          {sections.map((section) => (
+            <div key={`${section.id}-accordion`} className="accordion-item md:hidden">
+              <div className="flex items-center justify-between">
+                <p className="label-8bit text-sm text-brand-700">{section.title}</p>
+                <button
+                  className="pixel-button bg-white text-slate-900"
+                  onClick={() => {
+                    setActiveSection(section.id);
+                    setIsModalOpen(true);
+                  }}
+                >
+                  문의하기
+                </button>
               </div>
-              <p className="mt-2 text-xs text-slate-500">{table.fields.join(' · ')}</p>
-              <p className="mt-3 text-sm text-slate-700">{table.highlight}</p>
+              <p className="mt-1 text-sm font-semibold text-slate-900">{section.summary}</p>
+              <ul className="mt-3 space-y-2 text-sm text-slate-800">
+                {section.points.map((point) => (
+                  <li key={point} className="flex items-start gap-2">
+                    <span className="mt-1 h-2 w-2 rounded-sm bg-slate-900" aria-hidden />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
-        <div className="callout mt-4">
-          Vercel 프론트엔드에서 Edge Functions를 활용해 Prompt 처리 일부를 수행하고, Supabase Function으로
-          메일 전송 및 저장 로직을 분리합니다.
-        </div>
-      </SectionCard>
+      </section>
 
-      <SectionCard
-        title="Contact & Feedback Loop"
-        description="문의 자체가 데이터입니다. 반복되는 질문과 전환 지점을 Prompt 개선에 반영합니다."
-        badge="Feedback"
-      >
-        <div className="grid gap-4 md:grid-cols-3">
-          <FeatureList
-            title="문의 흐름"
-            items={['Modal 또는 링크를 통해 문의를 수집', '문의 내용은 Context 데이터로 누적', '반복 질문 → Prompt에 명시적으로 반영']}
-          />
-          <FeatureList
-            title="측정 지표"
-            items={[
-              'CTA 클릭률 · 스크롤 깊이로 섹션별 퍼널 확인',
-              '문의 유형/직무 데이터로 타겟 정의 명확화',
-              '강의/협업 전환율을 Prompt 수정 전후로 비교'
-            ]}
-          />
-          <FeatureList
-            title="Codex 역할"
-            items={[
-              'Prompt Engineer + 주니어 PM 관점에서 가설 제안',
-              '전환율이 낮은 섹션의 원인 추론 및 Prompt 리라이트',
-              '신규 문의 패턴을 ROC에 반영하여 메시지 세분화'
-            ]}
-          />
-        </div>
-      </SectionCard>
-
-      <footer id="contact" className="rounded-2xl border border-brand-100 bg-brand-50 px-6 py-6 text-sm text-brand-900">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <section className="pixel-card space-y-6">
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-lg font-semibold">Vercel 배포 Ready</p>
-            <p>
-              Next.js App Router + Tailwind 세팅 완료. Supabase 환경 변수만 추가하면 즉시 배포 가능합니다.
+            <h2 className="section-title">Courses</h2>
+            <p className="section-description">라이브/예정 강의를 확인하고 바로 신청하세요.</p>
+          </div>
+          <button
+            className="pixel-button bg-brand-500 text-white"
+            type="button"
+            onClick={() => {
+              logEvent('course_click', { source: 'header' });
+              setIsModalOpen(true);
+            }}
+          >
+            강의 문의하기
+          </button>
+        </div>
+        <div className="card-grid">
+          {profile.courses.map((course) => (
+            <div key={course.title} className="course-card">
+              <div className="flex items-center justify-between">
+                <p className="label-8bit text-brand-700">{course.status}</p>
+                <button
+                  className="pixel-chip bg-white text-brand-700"
+                  onClick={() => {
+                    logEvent('course_click', { title: course.title });
+                    setIsModalOpen(true);
+                  }}
+                >
+                  문의하기
+                </button>
+              </div>
+              <h3 className="text-xl font-extrabold text-slate-900">{course.title}</h3>
+              <p className="text-sm text-slate-700">{course.detail}</p>
+              <a
+                href={course.link}
+                className="text-sm font-semibold text-brand-700 underline underline-offset-4"
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => logEvent('course_click', { href: course.link })}
+              >
+                상세 보기 →
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="pixel-card space-y-4">
+        <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="label-8bit text-brand-700">Prompt Loop</p>
+            <h2 className="section-title">퍼블릭 BIO는 Output만 노출됩니다</h2>
+            <p className="section-description">
+              ROC, Prompt, 개선 히스토리는 /lab에서 확인하세요. 행동 데이터(클릭·문의)는 Supabase reviews 테이블로 저장됩니다.
             </p>
           </div>
-          <div className="flex flex-wrap gap-3">
-            <a
-              className="rounded-full bg-white px-4 py-2 font-semibold text-brand-700 shadow-sm transition hover:shadow"
-              href="https://vercel.com/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Vercel로 배포하기
-            </a>
-            <a
-              className="rounded-full border border-brand-300 bg-brand-600 px-4 py-2 font-semibold text-white shadow-sm transition hover:bg-brand-700"
-              href="mailto:hello@vibecoding.ai"
-            >
-              협업/강의 문의
-            </a>
+          <Link className="pixel-button bg-slate-900 text-white" href="/lab">
+            /lab로 이동
+          </Link>
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="callout">
+            <p className="label-8bit text-xs text-brand-700">Prompt</p>
+            <p className="mt-2 text-sm text-slate-900">섹션별 ROC를 가진 Prompt로 관리</p>
+          </div>
+          <div className="callout">
+            <p className="label-8bit text-xs text-brand-700">Output</p>
+            <p className="mt-2 text-sm text-slate-900">게시된 카피는 outputs.is_published=true</p>
+          </div>
+          <div className="callout">
+            <p className="label-8bit text-xs text-brand-700">Review</p>
+            <p className="mt-2 text-sm text-slate-900">CTA/링크 클릭, 문의 유형까지 Supabase 적재</p>
           </div>
         </div>
+      </section>
+
+      <footer>
+        <div className="flex flex-col items-center gap-3 text-center">
+          <p className="label-8bit text-slate-700">Made for Vercel · Supabase</p>
+          <p>codex-web-3.vercel.app · 문의: hello@vibecoding.ai</p>
+        </div>
       </footer>
+
+      <ContactModal
+        open={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setContactStatus('idle');
+          setFeedback('');
+        }}
+        defaultType={defaultInquiryType}
+        status={contactStatus}
+        feedback={feedback}
+        onSubmit={(payload) => submitInquiry(payload, setContactStatus, setFeedback)}
+      />
     </main>
   );
 }

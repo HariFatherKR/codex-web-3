@@ -8,6 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        display: ['var(--font-press)', 'Inter', 'system-ui', 'sans-serif'],
+        body: ['Inter', 'system-ui', 'sans-serif']
+      },
       colors: {
         brand: {
           50: '#f4f8ff',
@@ -21,6 +25,9 @@ const config: Config = {
           800: '#1f327f',
           900: '#1b2c65'
         }
+      },
+      boxShadow: {
+        pixel: '6px 6px 0 #0f172a'
       }
     }
   },
