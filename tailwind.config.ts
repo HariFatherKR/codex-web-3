@@ -24,6 +24,11 @@ const config: Config = {
           700: '#243da6',
           800: '#1f327f',
           900: '#1b2c65'
+        },
+        neon: {
+          green: '#7eff6b',
+          blue: '#6ce1ff',
+          purple: '#b48aff'
         }
       },
       boxShadow: {

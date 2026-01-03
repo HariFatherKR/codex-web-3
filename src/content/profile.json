@@ -1,45 +1,29 @@
 {
-  "level": {
-    "label": "LEVEL 3",
-    "title": "Vibe Coding Creator",
-    "xp": 72
-  },
   "hero": {
     "name": "바이브코딩 크리에이터",
-    "tagline": "AI로 사고하는 시스템을 설계합니다",
-    "intro": "ChatGPT·Claude로 비개발자도 프로덕트를 만들게 돕습니다",
-    "keywords": ["Prompt Ops", "Vercel Edge", "Supabase", "AI Workshop", "A/B Prompt"]
+    "tagline": "Vibe Coding Creator · AI로 프로덕트를 만드는 사고방식",
+    "avatar": "👾"
   },
-  "quickLinks": [
+  "socials": [
     {
-      "label": "YouTube",
-      "href": "https://www.youtube.com/@vibecoding",
-      "accent": "#ff8b38"
+      "id": "youtube",
+      "href": "https://www.youtube.com/@vibecoding"
     },
     {
-      "label": "Instagram",
-      "href": "https://www.instagram.com/vibecoding.ai",
-      "accent": "#ff3b7b"
+      "id": "instagram",
+      "href": "https://www.instagram.com/vibecoding.ai"
     },
     {
-      "label": "Threads",
-      "href": "https://www.threads.net/@vibecoding.ai",
-      "accent": "#111"
+      "id": "threads",
+      "href": "https://www.threads.net/@vibecoding.ai"
     },
     {
-      "label": "LinkedIn",
-      "href": "https://www.linkedin.com/in/vibecoding",
-      "accent": "#0a66c2"
+      "id": "linkedin",
+      "href": "https://www.linkedin.com/in/vibecoding"
     },
     {
-      "label": "Newsletter",
-      "href": "https://vibecoding.substack.com",
-      "accent": "#6344ff"
-    },
-    {
-      "label": "Blog",
-      "href": "https://blog.vibecoding.ai",
-      "accent": "#18b49f"
+      "id": "github",
+      "href": "https://github.com/vibecoding"
     }
   ],
   "sections": [
@@ -48,9 +32,9 @@
       "title": "Who",
       "summary": "AI 제품 사고방식을 가르치는 8bit 가이드",
       "points": [
-        "비개발자도 따라올 수 있는 Vercel·Supabase 기반 실습 제공",
-        "Prompt를 ROC 단위로 쪼개어 사고하는 훈련 진행",
-        "실제 문의 데이터를 Prompt 개선에 즉시 반영"
+        "비개발자도 따라올 수 있는 Vercel·Supabase 실습",
+        "Prompt를 ROC 단위로 쪼개는 사고 훈련",
+        "문의 데이터를 Prompt 개선에 즉시 반영"
       ]
     },
     {
@@ -58,9 +42,9 @@
       "title": "Good At",
       "summary": "문장을 넘어 시스템을 설계",
       "points": [
-        "Prompt → Output → Review → Improve 루프를 제품화",
-        "전환형 카피·CTA를 A/B 테스트로 빠르게 개선",
-        "Supabase 이벤트로 행동 데이터를 구조적으로 적재"
+        "Prompt → Output → Review → Improve 루프 설계",
+        "전환형 카피·CTA A/B 테스트",
+        "Supabase 이벤트로 행동 데이터 적재"
       ]
     },
     {
@@ -68,9 +52,9 @@
       "title": "What I've Done",
       "summary": "실험과 수업으로 증명",
       "points": [
-        "기업/대학 대상 AI 실습 워크숍 30회+ 진행",
-        "Vercel + Edge 함수로 빠른 프로토타이핑",
-        "커뮤니티 피드백을 Prompt 리라이트에 반영"
+        "AI 실습 워크숍 30회+ 진행",
+        "Vercel + Edge 함수 프로토타입",
+        "커뮤니티 피드백으로 Prompt 리라이트"
       ]
     },
     {
@@ -86,43 +70,43 @@
   ],
   "doneProjects": [
     {
-      "title": "AI 워크숍 30회+ 운영",
-      "detail": "비개발자도 따라오는 Vercel·Supabase 실습 커리큘럼",
+      "title": "AI 워크숍 30회+",
+      "detail": "비개발자도 따라오는 Vercel·Supabase 실습",
       "link": "https://vibecoding.ai/live"
     },
     {
       "title": "Prompt Loop 실험실",
-      "detail": "Prompt → Output → Review 데이터를 연결한 8bit BIO 실험",
+      "detail": "Output 로그를 바로 리라이트에 반영",
       "link": "https://vibecoding.ai/lab"
     },
     {
-      "title": "콘텐츠 전환형 카피 테스트",
-      "detail": "CTA/문의 로그를 모아 카피를 리라이트하는 A/B 테스트",
+      "title": "전환형 카피 A/B",
+      "detail": "CTA/문의 로그 기반 카피 실험",
       "link": "https://www.linkedin.com/in/vibecoding"
     },
     {
       "title": "팀 단위 Prompt Ops",
-      "detail": "팀 ROC 설계와 리뷰 데이터를 묶어 협업 속도 개선",
+      "detail": "ROC 정의와 리뷰 데이터로 협업 속도 개선",
       "link": "https://vibecoding.ai/team"
     }
   ],
   "courses": [
     {
-      "title": "LIVE: 비개발자용 Prompt Ops",
-      "status": "Live",
-      "detail": "노코드+Vercel+Supabase로 AI 실험 돌리기",
+      "title": "LIVE: Prompt Ops 실습",
+      "status": "LIVE",
+      "detail": "노코드 + Vercel + Supabase",
       "link": "https://vibecoding.ai/live"
     },
     {
       "title": "Coming Soon: Team Prompt Lab",
-      "status": "Coming soon",
-      "detail": "팀 단위 ROC 정의와 A/B Prompt 실습",
+      "status": "COMING SOON",
+      "detail": "팀 ROC 정의와 A/B Prompt",
       "link": "https://vibecoding.ai/team"
     }
   ],
   "cta": {
     "primary": "강의 보기",
-    "secondary": "협업/강의 문의",
-    "heroLink": "https://vibecoding.ai/course"
+    "secondary": "문의하기",
+    "heroLink": "https://vibecoding.ai/live"
   }
 }
