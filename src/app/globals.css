@@ -1,0 +1,311 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --bg: #0b1021;
+  --surface: #0f152b;
+  --surface-strong: #161c36;
+  --pixel-accent: #8ef0ff;
+  --pixel-hot: #ff70a6;
+  --pixel-warm: #ffd166;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-inter), 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #f2f6ff;
+  background: radial-gradient(circle at 10% 20%, rgba(255, 112, 166, 0.08) 0, transparent 25%),
+    radial-gradient(circle at 80% 0%, rgba(142, 240, 255, 0.08) 0, transparent 30%),
+    radial-gradient(circle at 40% 90%, rgba(255, 209, 102, 0.1) 0, transparent 25%),
+    linear-gradient(180deg, #0b1021 0%, #0f1327 50%, #0b1021 100%);
+  min-height: 100vh;
+  letter-spacing: -0.01em;
+}
+
+.container {
+  @apply mx-auto max-w-5xl px-5;
+}
+
+a {
+  @apply transition-colors;
+}
+
+a:hover {
+  color: var(--pixel-accent);
+}
+
+.pixel-font {
+  font-family: var(--font-pixel), 'Pixelify Sans', 'Press Start 2P', monospace;
+  letter-spacing: 0.02em;
+}
+
+.page-shell {
+  @apply container py-10 md:py-14;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pixel-card {
+  background: var(--surface);
+  border: 3px solid #161c36;
+  box-shadow: 0 12px 0 #070a17, 0 14px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pixel-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(142, 240, 255, 0.14);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.pixel-card-content {
+  padding: 1.5rem;
+}
+
+.pixel-divider {
+  height: 2px;
+  background-image: linear-gradient(90deg, transparent, rgba(142, 240, 255, 0.5), transparent);
+  margin: 1rem 0;
+}
+
+.keyword-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 2px solid #1f2543;
+  background: rgba(142, 240, 255, 0.08);
+  color: #e6f9ff;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  box-shadow: 0 5px 0 #070a17;
+}
+
+.pixel-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 3px solid #161c36;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  position: relative;
+  box-shadow: 0 8px 0 #070a17;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 150ms ease, color 150ms ease;
+}
+
+.pixel-button:hover {
+  transform: translateY(-1px) rotate(-0.5deg);
+  box-shadow: 0 10px 0 #070a17;
+}
+
+.pixel-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 6px 0 #070a17;
+}
+
+.pixel-button.primary {
+  background: linear-gradient(135deg, #8ef0ff 0%, #83b8ff 100%);
+  color: #0c0f22;
+}
+
+.pixel-button.secondary {
+  background: linear-gradient(135deg, #ff70a6 0%, #ff94c2 100%);
+  color: #0c0f22;
+}
+
+.pixel-button.ghost {
+  background: #0c0f22;
+  color: #e6edff;
+}
+
+.badge-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border: 2px dashed rgba(142, 240, 255, 0.5);
+  border-radius: 999px;
+  color: #cdeeff;
+  font-size: 0.85rem;
+}
+
+.level-bar {
+  background: #0c0f22;
+  border: 2px solid #161c36;
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.level-meter {
+  flex: 1;
+  height: 12px;
+  border: 2px solid #161c36;
+  border-radius: 999px;
+  background: #0b1021;
+  overflow: hidden;
+  position: relative;
+}
+
+.level-meter span {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #8ef0ff, #ff70a6, #ffd166);
+}
+
+.grid-links {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.link-tile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border: 2px solid #1d2341;
+  background: linear-gradient(135deg, rgba(142, 240, 255, 0.07), rgba(12, 15, 34, 0.9));
+  border-radius: 12px;
+  text-decoration: none;
+  color: #e6f9ff;
+  box-shadow: 0 6px 0 #070a17;
+}
+
+.link-tile:hover {
+  border-color: var(--pixel-accent);
+  transform: translateY(-1px);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #e6f9ff;
+}
+
+.section-heading h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.section-heading .dot {
+  width: 12px;
+  height: 12px;
+  background: var(--pixel-hot);
+  box-shadow: 0 0 0 3px rgba(255, 112, 166, 0.3);
+  border-radius: 4px;
+}
+
+.list-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--pixel-accent);
+  border-radius: 2px;
+  margin-top: 5px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 30;
+}
+
+.modal-card {
+  background: #0f152b;
+  border: 3px solid #161c36;
+  border-radius: 12px;
+  width: min(520px, 100%);
+  box-shadow: 0 14px 0 #070a17, 0 18px 20px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.modal-card h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.input-stack {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.input-stack label {
+  font-size: 0.95rem;
+  color: #d8e6ff;
+}
+
+.input-stack input,
+.input-stack select,
+.input-stack textarea {
+  width: 100%;
+  background: #0c0f22;
+  border: 2px solid #1d2341;
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  color: #f2f6ff;
+  font-size: 0.95rem;
+}
+
+.input-stack input:focus,
+.input-stack select:focus,
+.input-stack textarea:focus {
+  outline: 2px solid var(--pixel-accent);
+  border-color: var(--pixel-accent);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #0c0f22;
+  background: #8ef0ff;
+  font-weight: 700;
+}
+
+.status-pill.soon {
+  background: #ffd166;
+}
+
+.status-pill.lab {
+  background: #ff70a6;
+}
+
+@media (max-width: 768px) {
+  .pixel-card {
+    box-shadow: 0 10px 0 #070a17;
+  }
+
+  .pixel-card-content {
+    padding: 1.1rem;
+  }
+
+  .page-shell {
+    gap: 1rem;
+  }
+}
